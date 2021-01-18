@@ -55,10 +55,70 @@ describe('components/AdminSidebar', () => {
         actions: {
             getPlugins: jest.fn(),
         },
+        consoleAccess: {
+            read: {
+                about: true,
+                reporting: true,
+                user_management: true,
+                environment: true,
+                site_configuration: true,
+                authentication: true,
+                plugins: true,
+                integrations: true,
+                compliance: true,
+                experimental: true,
+            },
+            write: {
+                about: true,
+                reporting: true,
+                user_management: true,
+                environment: true,
+                site_configuration: true,
+                authentication: true,
+                plugins: true,
+                integrations: true,
+                compliance: true,
+                experimental: true,
+            },
+        },
     };
 
     test('should match snapshot', () => {
         const props = {...defaultProps};
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should match snapshot, no access', () => {
+        const ca = {
+            consoleAccess: {
+                read: {
+                    about: false,
+                    reporting: false,
+                    user_management: false,
+                    environment: false,
+                    site_configuration: false,
+                    authentication: false,
+                    plugins: false,
+                    integrations: false,
+                    compliance: false,
+                    experimental: false,
+                },
+                write: {
+                    about: false,
+                    reporting: false,
+                    user_management: false,
+                    environment: false,
+                    site_configuration: false,
+                    authentication: false,
+                    plugins: false,
+                    integrations: false,
+                    compliance: false,
+                    experimental: false,
+                },
+            },
+        };
+        const props = {...defaultProps, ...ca};
         const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
@@ -199,6 +259,7 @@ describe('components/AdminSidebar', () => {
                 MessageExport: 'true',
                 Elasticsearch: 'true',
                 CustomPermissionsSchemes: 'true',
+                OpenId: 'true',
             },
             config: {
                 ExperimentalSettings: {
@@ -207,6 +268,21 @@ describe('components/AdminSidebar', () => {
                 PluginSettings: {
                     Enable: true,
                     EnableUploads: true,
+                },
+                GoogleSettings: {
+                    Id: 'googleID',
+                    Secret: 'googleSecret',
+                    Scope: 'scope',
+                },
+                GitLabSettings: {
+                    Id: 'gitlabID',
+                    Secret: 'gitlabSecret',
+                    Scope: 'scope',
+                },
+                Office365Settings: {
+                    Id: 'office365ID',
+                    Secret: 'office365Secret',
+                    Scope: 'scope',
                 },
             },
             adminDefinition: AdminDefinition,
@@ -231,6 +307,32 @@ describe('components/AdminSidebar', () => {
             onFilterChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
+            },
+            consoleAccess: {
+                read: {
+                    about: true,
+                    reporting: true,
+                    user_management: true,
+                    environment: true,
+                    site_configuration: true,
+                    authentication: true,
+                    plugins: true,
+                    integrations: true,
+                    compliance: true,
+                    experimental: true,
+                },
+                write: {
+                    about: true,
+                    reporting: true,
+                    user_management: true,
+                    environment: true,
+                    site_configuration: true,
+                    authentication: true,
+                    plugins: true,
+                    integrations: true,
+                    compliance: true,
+                    experimental: true,
+                },
             },
         };
 
@@ -349,6 +451,11 @@ describe('components/AdminSidebar', () => {
             onFilterChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
+            },
+            consoleAccess: {
+                read: {
+                    plugins: true,
+                },
             },
         };
 

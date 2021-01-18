@@ -73,6 +73,7 @@ export default class Logs extends React.PureComponent<Props, State> {
         if (this.props.logs.length >= this.props.perPage) {
             nextButton = (
                 <button
+                    type='button'
                     className='btn btn-default filter-control filter-control__next pull-right'
                     onClick={this.nextPage}
                     disabled={this.state.nextDisabled}
@@ -89,6 +90,7 @@ export default class Logs extends React.PureComponent<Props, State> {
         if (this.props.page > 0) {
             previousButton = (
                 <button
+                    type='button'
                     className='btn btn-default filter-control filter-control__prev'
                     onClick={this.previousPage}
                 >
@@ -117,7 +119,7 @@ export default class Logs extends React.PureComponent<Props, State> {
             const style: React.CSSProperties = {
                 whiteSpace: 'nowrap',
                 fontFamily: 'monospace',
-                color: ''
+                color: '',
             };
 
             if (this.props.logs[i].indexOf('[EROR]') > 0) {

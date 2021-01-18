@@ -11,6 +11,7 @@
 // Group: @messaging
 
 import {getAdminAccount} from '../../support/env';
+import {spyNotificationAs} from '../../support/notification';
 
 function setNotificationSettings(desiredSettings = {first: true, username: true, shouts: true, custom: true, customText: '@'}, channel) {
     // Navigate to settings modal
@@ -59,41 +60,13 @@ function setNotificationSettings(desiredSettings = {first: true, username: true,
         should('not.exist');
 
     // Setup notification spy
-    cy.window().then((win) => {
-        function Notification(title, opts) {
-            this.title = title;
-            this.opts = opts;
-        }
-
-        Notification.requestPermission = function() {
-            return 'granted';
-        };
-
-        Notification.close = function() {
-            return true;
-        };
-
-        win.Notification = Notification;
-
-        cy.spy(win, 'Notification').as('notifySpy');
-    });
-
-    // Verify that we now have a Notification property
-    cy.window().should('have.property', 'Notification');
+    spyNotificationAs('notifySpy', 'granted');
 
     // # Navigate to a channel we are NOT going to post to
     cy.get(`#sidebarItem_${channel.name}`).scrollIntoView().click({force: true});
 }
 
 describe('at-mention', () => {
-    function ignoreUncaughtException() {
-        cy.on('uncaught:exception', (err) => {
-            expect(err.message).to.include('.close is not a function');
-
-            return false;
-        });
-    }
-
     const admin = getAdminAccount();
     let testTeam;
     let otherChannel;
@@ -121,12 +94,12 @@ describe('at-mention', () => {
                 cy.apiAddUserToTeam(testTeam.id, sender.id);
             });
 
-            cy.apiGetChannelByName(testTeam.name, 'town-square').then((res) => {
-                townsquareChannelId = res.body.id;
+            cy.apiGetChannelByName(testTeam.name, 'town-square').then((out) => {
+                townsquareChannelId = out.channel.id;
             });
 
-            cy.apiGetChannelByName(testTeam.name, 'off-topic').then((res) => {
-                offTopicChannelId = res.body.id;
+            cy.apiGetChannelByName(testTeam.name, 'off-topic').then((out) => {
+                offTopicChannelId = out.channel.id;
             });
 
             // # Login as receiver and visit off-topic channel
@@ -136,8 +109,6 @@ describe('at-mention', () => {
     });
 
     it('N14571 still triggers notification if username is not listed in words that trigger mentions', () => {
-        ignoreUncaughtException();
-
         // # Set Notification settings
         setNotificationSettings({first: false, username: true, shouts: true, custom: true}, otherChannel);
 
@@ -186,9 +157,7 @@ describe('at-mention', () => {
             and('have.text', `@${receiver.username}`);
     });
 
-    it('N14570 does not trigger notifications with "Your non-case sensitive username" unchecked', () => {
-        ignoreUncaughtException();
-
+    it('N14570 does not trigger notifications with "Your non case-sensitive username" unchecked', () => {
         // # Set Notification settings
         setNotificationSettings({first: false, username: false, shouts: true, custom: true}, otherChannel);
 
@@ -227,8 +196,6 @@ describe('at-mention', () => {
     });
 
     it('N14572 does not trigger notifications with "channel-wide mentions" unchecked', () => {
-        ignoreUncaughtException();
-
         // # Set Notification settings
         setNotificationSettings({first: false, username: false, shouts: false, custom: true}, otherChannel);
 
@@ -270,8 +237,6 @@ describe('at-mention', () => {
     });
 
     it('MM-T184 Words that trigger mentions support Chinese', () => {
-        ignoreUncaughtException();
-
         var customText = '番茄';
 
         // # Set Notification settings

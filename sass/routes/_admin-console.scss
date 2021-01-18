@@ -23,6 +23,10 @@
         .announcement-bar--fixed & {
             height: calc(100vh - 32px);
         }
+
+        .announcement-banner-tall--fixed & {
+            height: calc(100vh - 40px);
+        }
     }
 
     .admin-console__wrapper {
@@ -66,6 +70,10 @@
         top: 40px;
         z-index: 5;
     }
+    
+    .color-input {
+        width: 232px;
+    }
 
     .dropdown-menu {
         .divider {
@@ -77,6 +85,10 @@
         height: calc(100vh - 175px);
 
         .announcement-bar--fixed & {
+            height: calc(100vh - 205px);
+        }
+
+        .announcement-banner-tall--fixed & {
             height: calc(100vh - 205px);
         }
     }
@@ -105,7 +117,7 @@
         background-color: $white;
         border: 1px solid $light-gray;
 
-        &:focus {
+        &:focus:not(.Input) {
             @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6));
             border-color: #66afe9;
             outline: 0;
@@ -117,6 +129,10 @@
 
         .placeholder-text {
             color: $gray;
+        }
+
+        &.Input {
+            border: none;
         }
     }
 
@@ -502,7 +518,7 @@
         font-weight: 400;
         margin-top: 10px;
     }
-    .trial-legal-terms {
+    .trial-legal-terms, .upgrade-legal-terms {
         margin-top: 10px;
         margin-bottom: 0;
         color: $dark-gray;
@@ -596,6 +612,11 @@
         padding-bottom: $announcement-bar-height;
     }
 
+    body.announcement-banner-tall--fixed & {
+        top: 40px;
+        padding-bottom: 40px;
+    }
+
     .dropdown-menu {
         max-height: 80vh;
         max-width: 200px;
@@ -679,6 +700,21 @@
 
     .sidebar-section-title {
         padding: 6px 35px 6px 12px;
+    }
+
+    .sidebar-section-tag {
+        padding: 0px 4px 0px 4px;
+        color: rgba(61,60,64,1);
+        font-size: 10px;
+        font-weight: 600;
+        height: 16px;
+        margin-left: 8px;
+        position: relative;
+        top: -1px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,0.64);
+        text-transform: uppercase;
+        ;
     }
 
     .sidebar-subsection-title {
@@ -969,4 +1005,16 @@
     .banner {
         max-width: 920px;
     }
+}
+
+div[disabled] {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.enterprise-license-text {
+    padding: 10px;
+    text-align: justify;
+    border: 1px solid $light-gray;
+    background: white;
 }

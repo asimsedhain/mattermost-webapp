@@ -5,19 +5,19 @@ import React from 'react';
 
 import Setting from './setting';
 
-type InputTypes = 'input' | 'textarea' | 'number' | 'email' | 'tel' | 'url' | 'password'
+export type InputTypes = 'input' | 'textarea' | 'number' | 'email' | 'tel' | 'url' | 'password'
 
 export type WidgetTextSettingProps = {
     id: string;
     label: React.ReactNode;
-    labelClassName: string;
+    labelClassName?: string;
     placeholder?: string;
     helpText?: React.ReactNode;
     footer?: React.ReactNode;
     value: string | number;
-    inputClassName: string;
-    maxLength: number;
-    resizable: boolean;
+    inputClassName?: string;
+    maxLength?: number;
+    resizable?: boolean;
     onChange(name: string, value: any): void;
     disabled?: boolean;
     type: InputTypes;

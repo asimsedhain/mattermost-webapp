@@ -45,7 +45,7 @@ describe('Verify Accessibility Support in Dropdown Menus', () => {
         cy.visit(`/${testTeam.name}/channels/off-topic`).wait(TIMEOUTS.FIVE_SEC);
     });
 
-    it('MM-22627 Accessibility Support in Channel Menu Dropdown', () => {
+    it('MM-T1464 Accessibility Support in Channel Menu Dropdown', () => {
         // # Press tab from the Channel Favorite button
         cy.get('#toggleFavorite').focus().wait(TIMEOUTS.HALF_SEC).tab({shift: true}).tab().tab();
 
@@ -70,7 +70,7 @@ describe('Verify Accessibility Support in Dropdown Menus', () => {
         cy.get('#channelHeaderDropdownMenu').should('not.exist');
     });
 
-    it('MM-22627 Accessibility Support in Main Menu Dropdown', () => {
+    it('MM-T1476 Accessibility Support in Main Menu Dropdown', () => {
         // # Press tab from the Set Status button
         cy.get('.status-wrapper button.status').focus().wait(TIMEOUTS.HALF_SEC).tab({shift: true}).tab().tab();
 
@@ -102,9 +102,9 @@ describe('Verify Accessibility Support in Dropdown Menus', () => {
         cy.get('#sidebarDropdownMenu').should('not.exist');
     });
 
-    it('MM-22627 Accessibility Support in Status Dropdown', () => {
-        // # Press tab from Add Team button
-        cy.get('#create_teamTeamButton').focus().wait(TIMEOUTS.HALF_SEC).tab({shift: true}).tab().tab();
+    it('MM-T1477 Accessibility Support in Status Dropdown', () => {
+        // # Press tab from the test team button
+        cy.get(`#${testTeam.name}TeamButton`).focus().wait(TIMEOUTS.HALF_SEC).tab({shift: true}).tab().tab().tab();
 
         // * Verify the aria-label in status menu button
         cy.get('.status-wrapper button.status').should('have.attr', 'aria-label', 'set status').and('have.class', 'a11y--active a11y--focused').click();

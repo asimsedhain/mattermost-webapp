@@ -7,26 +7,24 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
-// Stage: @prod
 // Group: @enterprise @system_console
 
 import * as TIMEOUTS from '../../../fixtures/timeouts';
-import {testWithConfig} from '../../../support/hooks';
 
 describe('Archived channels', () => {
     let testChannel;
 
-    testWithConfig({
-        TeamSettings: {
-            ExperimentalViewArchivedChannels: true,
-        },
-    });
-
     before(() => {
         cy.apiRequireLicense();
 
+        cy.apiUpdateConfig({
+            TeamSettings: {
+                ExperimentalViewArchivedChannels: true,
+            },
+        });
+
         cy.apiInitSetup({
-            channelPrefix: {name: 'aaa-archive', displayName: 'AAA Archive Test'},
+            channelPrefix: {name: '000-archive', displayName: '000 Archive Test'},
         }).then(({channel}) => {
             testChannel = channel;
 
@@ -83,11 +81,11 @@ describe('Archived channels', () => {
 
         // # Save and wait for redirect
         cy.get('#saveSetting').click();
-        cy.get('.DataGrid', {timeout: TIMEOUTS.TWO_SEC}).should('be.visible');
+        cy.get('.DataGrid', {timeout: TIMEOUTS.TWO_SEC}).scrollIntoView().should('be.visible');
 
         // * Verify via the API that the channel is unarchived
-        cy.apiGetChannel(testChannel.id).then((response) => {
-            expect(response.body.delete_at).to.eq(0);
+        cy.apiGetChannel(testChannel.id).then(({channel}) => {
+            expect(channel.delete_at).to.eq(0);
         });
     });
 });

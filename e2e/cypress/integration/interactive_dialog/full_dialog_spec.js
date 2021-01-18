@@ -7,6 +7,7 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
+// Stage: @prod
 // Group: @interactive_dialog
 
 /**
@@ -104,7 +105,7 @@ describe('Interactive Dialog', () => {
                     cy.wrap($elForm).find('#suggestionList').should('not.be.visible');
                     cy.wrap($elForm).find('input').click();
                     cy.wrap($elForm).find('#suggestionList').scrollIntoView().should('be.visible').children().then((el) => {
-                        if (element.name === 'someuserselector' && config.ElasticsearchSettings.EnableIndexing) {
+                        if (element.name === 'someuserselector' && config.ElasticsearchSettings && config.ElasticsearchSettings.EnableIndexing) {
                             return;
                         }
 

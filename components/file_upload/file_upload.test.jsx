@@ -157,7 +157,7 @@ describe('components/FileUpload', () => {
 
         // not allow file upload, max limit has been reached
         wrapper.setState({menuOpen: true});
-        wrapper.setProps({fileCount: 5});
+        wrapper.setProps({fileCount: 10});
         wrapper.instance().handleLocalFileUploaded(evt);
         expect(baseProps.onClick).toHaveBeenCalledTimes(1);
         expect(wrapper.instance().handleMaxUploadReached).toHaveBeenCalledTimes(1);
@@ -206,6 +206,7 @@ describe('components/FileUpload', () => {
         const expectedFileName = 'Image Pasted at 2000-2-1 01-01';
 
         const event = new Event('paste');
+        event.preventDefault = jest.fn();
         const getAsFile = jest.fn().mockReturnValue(new File(['test'], 'test'));
         const file = {getAsFile, kind: 'file', name: 'test'};
         event.clipboardData = {items: [file], types: ['image/png']};
@@ -222,9 +223,29 @@ describe('components/FileUpload', () => {
             global.File = undefined;
         }
         document.dispatchEvent(event);
+        expect(event.preventDefault).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledWith([expect.objectContaining({name: expectedFileName})]);
         expect(spy.mock.calls[0][0][0]).toBeInstanceOf(Blob); // first call, first arg, first item in array
         expect(baseProps.onFileUploadChange).toHaveBeenCalled();
+    });
+
+    test('should not prevent paste event default if no file in clipboard', () => {
+        const event = new Event('paste');
+        event.preventDefault = jest.fn();
+        const getAsString = jest.fn();
+        event.clipboardData = {items: [{getAsString, kind: 'string', type: 'text/plain'}], types: ['text/plain']};
+
+        const wrapper = shallowWithIntl(
+            <FileUpload
+                {...baseProps}
+            />,
+        );
+        const spy = jest.spyOn(wrapper.instance(), 'containsEventTarget').mockReturnValue(true);
+
+        document.dispatchEvent(event);
+
+        expect(spy).toHaveBeenCalled();
+        expect(event.preventDefault).not.toHaveBeenCalled();
     });
 
     test('should have props.functions when uploadFiles is called', () => {
@@ -249,7 +270,7 @@ describe('components/FileUpload', () => {
     });
 
     test('should error max upload files', () => {
-        const fileCount = 5;
+        const fileCount = 10;
         const props = {...baseProps, fileCount};
         const files = [{name: 'file1.pdf'}, {name: 'file2.jpg'}];
 
@@ -268,7 +289,7 @@ describe('components/FileUpload', () => {
     });
 
     test('should error max upload files', () => {
-        const fileCount = 5;
+        const fileCount = 10;
         const props = {...baseProps, fileCount};
         const files = [{name: 'file1.pdf'}, {name: 'file2.jpg'}];
 

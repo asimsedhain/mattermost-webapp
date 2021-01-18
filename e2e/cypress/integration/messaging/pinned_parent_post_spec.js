@@ -7,6 +7,7 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
+// Stage: @prod
 // Group: @messaging
 
 describe('Messaging', () => {
@@ -55,7 +56,7 @@ describe('Messaging', () => {
             cy.get('#rhsCloseButton').click();
 
             // # Pin the post to the channel
-            cy.getPostMenu(postId, 'Pin to Channel').click();
+            cy.uiClickPostDropdownMenu(postId, 'Pin to Channel');
 
             // # Find the 'Pinned' span in the post pre-header to verify that the post was actually pinned
             cy.get(`#post_${postId}`).findByText('Pinned').should('exist');
